@@ -2,28 +2,28 @@
 
 <plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    id="org.wbt11a.nativecamera"
-    version="0.1.4">
-    
+    id="pro.alyans.nativecamera"
+    version="0.1.1">
+
     <name>Native Camera</name>
-    
+
     <engines>
         <engine name="cordova" version=">=3.0.0" />
     </engines>
-    
-    <description>Android Native Camera with Flash, Rear Facing Camera, Autozoom.  iOS Camera mirror of Apache Camera (cordova-plugin-camera)</description>
-    
-    <author>wezka-nativecamera</author>
-    
-    <keywords>cordova,camera,flash</keywords>
-    
-    <license>MIT</license>
-    
-    
-    <repo>https://github.com/wbt11a/cordova-plugin-wezka-nativecamera.git</repo>
-   
 
-    
+    <description>Android Native Camera with Flash, Rear Facing Camera, Autozoom.  iOS Camera mirror of Apache Camera (cordova-plugin-camera)</description>
+
+    <author>Nego</author>
+
+    <keywords>cordova,camera,flash</keywords>
+
+    <license>MIT</license>
+
+
+    <repo>https://github.com/nego25/cordova-plugin-wezka-nativecamera.git</repo>
+
+
+
     <js-module src="www/CameraConstants.js" name="Camera">
         <clobbers target="Camera" />
     </js-module>
@@ -40,21 +40,22 @@
     <platform name="android">
         <config-file target="res/xml/config.xml" parent="/*">
             <feature name="Camera">
-                <param name="android-package" value="org.wbt11a.nativecamera.NativeCameraLauncher"/>
+                <param name="android-package" value="pro.alyans.nativecamera.NativeCameraLauncher"/>
             </feature>
         </config-file>
 
         <config-file target="AndroidManifest.xml" parent="/*">
+            <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
             <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
             <uses-permission android:name="android.permission.CAMERA" />
             <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
         </config-file>
 
         <config-file target="AndroidManifest.xml" parent="/manifest/application">
-            <activity 
-                android:label="nativecameraplugin" 
-                android:name="org.wbt11a.nativecamera.CameraActivity" 
-                android:screenOrientation="portrait" 
+            <activity
+                android:label="nativecameraplugin"
+                android:name="pro.alyans.nativecamera.CameraActivity"
+                android:screenOrientation="portrait"
                 android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
             </activity>
         </config-file>
@@ -73,7 +74,7 @@
         <js-module src="www/CameraPopoverHandle.js" name="CameraPopoverHandle">
             <clobbers target="CameraPopoverHandle" />
         </js-module>
-      
+
      </platform>
 
       <!-- ios -->
@@ -84,11 +85,11 @@
              </feature>
              <preference name="CameraUsesGeolocation" value="false" />
          </config-file>
-         
+
          <js-module src="www/ios/CameraPopoverHandle.js" name="CameraPopoverHandle">
              <clobbers target="CameraPopoverHandle" />
          </js-module>
-         
+
          <header-file src="src/ios/UIImage+CropScaleOrientation.h" />
          <source-file src="src/ios/UIImage+CropScaleOrientation.m" />
          <header-file src="src/ios/CDVCamera.h" />
@@ -103,7 +104,7 @@
          <framework src="MobileCoreServices.framework" />
          <framework src="CoreGraphics.framework" />
          <framework src="AVFoundation.framework" />
-         
+
          <config-file target="*-Info.plist" parent="NSLocationWhenInUseUsageDescription">
              <string></string>
          </config-file>
@@ -125,5 +126,5 @@
         </js-module>
 
     </platform>
-          
+
 </plugin>

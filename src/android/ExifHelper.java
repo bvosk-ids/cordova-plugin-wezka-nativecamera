@@ -16,7 +16,7 @@
        specific language governing permissions and limitations
        under the License.
 */
-package org.wbt11a.nativecamera;
+package pro.alyans.nativecamera;
 
 import java.io.IOException;
 

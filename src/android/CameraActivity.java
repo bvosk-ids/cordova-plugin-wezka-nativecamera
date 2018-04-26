@@ -11,10 +11,10 @@
         distributed under the License is distributed on an "AS IS" BASIS,
         WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
         See the License for the specific language governing permissions and
-        limitations under the License.              
+        limitations under the License.
  */
 
-package org.wbt11a.nativecamera;
+package pro.alyans.nativecamera;
 
 import android.app.Activity;
 import android.content.pm.PackageManager;
@@ -237,7 +237,7 @@ public class CameraActivity extends Activity implements SensorEventListener {
             public void onClick(View v) {
                 if (pressed || camera == null)
                     return;
-                
+
                 Parameters p = camera.getParameters();
                 p.setRotation(degrees);
                 camera.setParameters(p);
@@ -251,7 +251,7 @@ public class CameraActivity extends Activity implements SensorEventListener {
                                 camera.takePicture(null, null, mPicture);
                             } catch (RuntimeException ex) {
                                 // takePicture crash. Ignore.
-                                Toast.makeText(getApplicationContext(), 
+                                Toast.makeText(getApplicationContext(),
                                     "Error taking picture", Toast.LENGTH_SHORT).show();
                                 Log.e(TAG, "Auto-focus crash");
                             }
@@ -259,10 +259,10 @@ public class CameraActivity extends Activity implements SensorEventListener {
                     });
                 } catch (RuntimeException ex) {
                     // Auto focus crash. Ignore.
-                    Toast.makeText(getApplicationContext(), 
+                    Toast.makeText(getApplicationContext(),
                         "Error focusing", Toast.LENGTH_SHORT).show();
                     Log.e(TAG, "Auto-focus crash");
-                }            
+                }
             }
         });
 
@@ -286,7 +286,7 @@ public class CameraActivity extends Activity implements SensorEventListener {
                             camera.takePicture(null, null, mPicture);
                         } catch (RuntimeException ex) {
                             // takePicture crash. Ignore.
-                            Toast.makeText(getApplicationContext(), 
+                            Toast.makeText(getApplicationContext(),
                                 "Error taking picture", Toast.LENGTH_SHORT).show();
                             Log.e(TAG, "Auto-focus crash");
                         }
@@ -294,10 +294,10 @@ public class CameraActivity extends Activity implements SensorEventListener {
                 });
             } catch (RuntimeException ex) {
                 // Auto focus crash. Ignore.
-                Toast.makeText(getApplicationContext(), 
+                Toast.makeText(getApplicationContext(),
                     "Error focusing", Toast.LENGTH_SHORT).show();
                 Log.e(TAG, "Auto-focus crash");
-            }            
+            }
             return true;
         } else {
             return super.onKeyDown(keyCode, event);
@@ -558,6 +558,3 @@ public class CameraActivity extends Activity implements SensorEventListener {
     }
 
 }
-
-
-
