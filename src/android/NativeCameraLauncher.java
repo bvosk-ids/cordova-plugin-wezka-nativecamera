@@ -147,12 +147,16 @@ public class NativeCameraLauncher extends CordovaPlugin {
 	public void takePicture() {
 		// Camera
 		if (this.srcType == 1) {
-			// Save the number of images currently on disk for later
-			Intent intent = new Intent(this.cordova.getActivity().getApplicationContext(), CameraActivity.class);
-			this.photo = createCaptureFile();
-			this.imageUri = Uri.fromFile(photo);
-			intent.putExtra(MediaStore.EXTRA_OUTPUT, this.imageUri);
-			this.cordova.startActivityForResult((CordovaPlugin) this, intent, 1);
+			if(!PermissionHelper.hasPermission(this, Manifest.permission.CAMERA)) {
+				PermissionHelper.requestPermission(this, TAKE_PIC_SEC, Manifest.permission.CAMERA);
+			} else {
+				// Save the number of images currently on disk for later
+				Intent intent = new Intent(this.cordova.getActivity().getApplicationContext(), CameraActivity.class);
+				this.photo = createCaptureFile();
+				this.imageUri = Uri.fromFile(photo);
+				intent.putExtra(MediaStore.EXTRA_OUTPUT, this.imageUri);
+				this.cordova.startActivityForResult((CordovaPlugin) this, intent, 1);
+			}	
 		}
 		else if ((this.srcType == 0) || (this.srcType == 2)) {
 			// FIXME: Stop always requesting the permission
