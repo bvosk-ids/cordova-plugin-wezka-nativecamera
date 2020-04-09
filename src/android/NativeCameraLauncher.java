@@ -245,17 +245,23 @@ public class NativeCameraLauncher extends CordovaPlugin {
 					// store Uri
 					bitmap = getRotatedBitmap(rotate, bitmap, exif);
 					Log.i(LOG_TAG, "URI: " + this.imageUri.toString());
-					OutputStream os = this.cordova.getActivity().getContentResolver()
+
+					if (this.destType == this.DATA_URL) {
+						final String base64 = this.processPicture(bitmap, this.encodingType);
+						this.callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, base64));
+					} else {
+						OutputStream os = this.cordova.getActivity().getContentResolver()
 							.openOutputStream(this.imageUri);
-					bitmap.compress(Bitmap.CompressFormat.JPEG, this.mQuality, os);
-					os.close();
+						bitmap.compress(Bitmap.CompressFormat.JPEG, this.mQuality, os);
+						os.close();
 
-					// Restore exif data to file
-					exif.createOutFile(this.imageUri.getPath());
-					exif.writeExifData();
+						// Restore exif data to file
+						exif.createOutFile(this.imageUri.getPath());
+						exif.writeExifData();
 
-					// Send Uri back to JavaScript for viewing image
-					this.callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, this.imageUri.toString()));
+						// Send Uri back to JavaScript for viewing image
+						this.callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, this.imageUri.toString()));
+					}
 
 					bitmap.recycle();
 					bitmap = null;
@@ -387,4 +393,23 @@ public class NativeCameraLauncher extends CordovaPlugin {
 
 		return cache.getAbsolutePath();
 	}
+
+	private String processPicture(final Bitmap bitmap, final int encodingType) {
+        ByteArrayOutputStream jpeg_data = new ByteArrayOutputStream();
+        final CompressFormat compressFormat = encodingType == JPEG ?
+                CompressFormat.JPEG :
+                CompressFormat.PNG;
+
+        try {
+            if (bitmap.compress(compressFormat, mQuality, jpeg_data)) {
+                final byte[] code = jpeg_data.toByteArray();
+                final byte[] output = Base64.encode(code, Base64.NO_WRAP);
+                return new String(output);
+            }
+        } catch (final Exception e) {
+            this.failPicture("Error compressing image.");
+        }
+		jpeg_data = null;
+		return "";
+    }
 }
