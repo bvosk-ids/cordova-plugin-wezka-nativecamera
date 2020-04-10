@@ -298,20 +298,48 @@ public class NativeCameraLauncher extends CordovaPlugin {
 		}
 	}
 
-	/**
-   * Applies all needed transformation to the image received from the gallery.
-   *
-   * @param destType In which form should we return the image
-   * @param intent   An Intent, which can return result data to the caller (various data can be attached to Intent "extras").
-   */
-  private void processResultFromGallery(int destType, Intent intent) {
-    Uri uri = intent.getData();
-    if (uri == null) {
-        this.failPicture("null data from photo library");
-        return;
-    }
+    /**
+     * Applies all needed transformation to the image received from the gallery.
+     *
+     * @param destType In which form should we return the image
+     * @param intent   An Intent, which can return result data to the caller (various data can be attached to Intent "extras").
+     */
+  	private void processResultFromGallery(int destType, Intent intent) {
+		Uri uri = intent.getData();
+		if (uri == null) {
+			this.failPicture("null data from photo library");
+			return;
+		}
+		
+		if (this.destType == this.DATA_URL) {
+			// Read in bitmap of captured image
+            Bitmap bitmap = null;
+            try {
+                try {
+                    bitmap = android.provider.MediaStore.Images.Media
+                            .getBitmap(this.cordova.getActivity().getContentResolver(), uri);
+                } catch (FileNotFoundException e) {
+                    android.content.ContentResolver resolver = this.cordova.getActivity().getContentResolver();
+                    bitmap = android.graphics.BitmapFactory
+                            .decodeStream(resolver.openInputStream(uri));
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+				this.failPicture("Error fetching image from photo library.");
+				return;
+            }
 
-    this.callbackContext.success(uri.toString());
+			// If bitmap cannot be decoded, this may return null
+			if (bitmap == null) {
+				this.failPicture("Error decoding image.");
+				return;
+			}
+
+			final String base64 = this.processPicture(bitmap, this.encodingType);
+			this.callbackContext.success(base64);
+		} else {
+			this.callbackContext.success(uri.toString());
+		}
 	}
 
 	public Bitmap scaleBitmap(Bitmap bitmap) {
